@@ -33,8 +33,7 @@ class Nota
     {
         if (property_exists($this, $propiedad)) {
             $this->$propiedad = $valor;
-        }
-        else {
+        } else {
             throw new Exception("Propiedad '$propiedad' no encontrada", 1);
         }
     }
@@ -53,7 +52,6 @@ class Nota
             $stmt->execute();
 
             echo "Nota insertada correctamente";
-
         } catch (PDOException $error) {
             echo "Error en la inserción" . $error->getMessage();
         } finally {
@@ -78,4 +76,3 @@ class Nota
 
         } */
 ?>
-
