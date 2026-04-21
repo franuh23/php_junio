@@ -59,6 +59,33 @@ class Nota
             $stmt = null;
         }
     }
+
+    public static function listarNotas($pdo)
+    {
+        try {
+            $sql = "SELECT id, titulo, usuario_id FROM notas LIMIT 50";
+
+            $stmt = $pdo->prepare($sql);
+            
+            $stmt->execute();
+
+            $notas = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            var_dump($notas);
+
+            foreach ($notas as $nota) {
+                echo "ID nota: " . $nota['id'];
+                echo "Título nota: " . $nota['titulo'];
+                echo "Usuario nota: " . $nota['usuario_id'];
+            }
+
+        } catch (PDOException $error) {
+            echo "Error en el select de listar notas" . $error->getMessage();
+        } finally {
+            $pdo = null;
+            $stmt = null;
+        }
+    }
 }
 
 /*try {
