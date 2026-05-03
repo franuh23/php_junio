@@ -86,6 +86,30 @@ class Nota
             $stmt = null;
         }
     }
+
+    public static function verNota($pdo, $id) {
+        try {
+            $sql = "SELECT id, titulo, contenido, fecha_creacion, usuario_id FROM notas WHERE id = :id";
+            $stmt = $pdo->prepare($sql);
+
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
+        
+            $nota = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($nota) {
+                return $nota;
+            } else {
+                return null;
+            }
+
+        } catch (PDOException $error) {
+            echo "Error al ver la nota." . $error->getMessage();
+        } finally {
+            $pdo = null;
+            $stmt = null;
+        }
+    }
 }
 
 /*try {
