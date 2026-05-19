@@ -8,13 +8,13 @@ class Usuario
     private $password;
     private $fecha_registro;
 
-    public function __construct($id, $nombre, $email, $password, $fecha_registro)
+    public function __construct($nombre, $email, $password, $id = null, $fecha_registro = null)
     {
         $this->id = $id;
         $this->nombre = $nombre;
         $this->email = $email;
         $this->password = $password;
-        $this->fecha_registro = $fecha_registro;
+        $this->fecha_registro = $fecha_registro ?? date('Y-m-d');
     }
 
     // Getter mágico

@@ -9,9 +9,9 @@ class Nota
     //private $fecha_actualizacion;
     private $usuario_id;
 
-    public function __construct($id = null, $titulo = null, $contenido = null, $fecha_creacion = null, $usuario_id = null)
+    public function __construct($titulo, $contenido, $usuario_id, $fecha_creacion = null)
     {
-        $this->id = $id;
+        
         $this->titulo = $titulo;
         $this->contenido = $contenido;
         $this->fecha_creacion = $fecha_creacion;
@@ -41,8 +41,7 @@ class Nota
     public function insertarNota($pdo)
     {
         try {
-            $sql = "INSERT INTO notas (titulo, contenido, usuario_id) 
-        VALUES(:titulo, :contenido, :usuario_id)";
+            $sql = "INSERT INTO notas (titulo, contenido, usuario_id) VALUES(:titulo, :contenido, :usuario_id)";
 
             $stmt = $pdo->prepare($sql);
             $stmt->bindParam(":titulo", $this->titulo);
@@ -69,14 +68,14 @@ class Nota
             
             $stmt->execute();
 
-            $notas = $stmt->fetch(PDO::FETCH_ASSOC);
+            $notas = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            var_dump($notas);
+            //var_dump($notas);
 
             foreach ($notas as $nota) {
-                echo "ID nota: " . $nota['id'];
-                echo "Título nota: " . $nota['titulo'];
-                echo "Usuario nota: " . $nota['usuario_id'];
+                echo "ID nota: " . $nota['id'] . "<br>";
+                echo "Título nota: " . $nota['titulo'] . "<br>";
+                echo "Usuario nota: " . $nota['usuario_id'] . "<br><br>";
             }
 
         } catch (PDOException $error) {
@@ -86,20 +85,30 @@ class Nota
             $stmt = null;
         }
     }
-}
 
-/*try {
-            $sql = "INSERT INTO notas (titulo, contenido, fecha_creacion, fecha_actualizacion, usuario_id) 
-        VALUES(:titulo, :contenido, :fecha_creacion, :fecha_actualizacion, :usuario_id)";
-
+    public static function verNota($pdo, $id) {
+        try {
+            $sql = "SELECT id, titulo, contenido, fecha_creacion, usuario_id FROM notas WHERE id = :id";
             $stmt = $pdo->prepare($sql);
-            $stmt->bindParam(":titulo", $this->titulo);
-            $stmt->bindParam(":contenido", $this->contenido);
-            $stmt->bindParam(":fecha_creacion", $this->fecha_creacion);
-            $stmt->bindParam(":fecha_actualizacion", $this->fecha_actualizacion);
-            $stmt->bindParam(":usuario_id", $this->usuario_id);
 
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
             $stmt->execute();
+        
+            $nota = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        } */
+            if ($nota) {
+                return $nota;
+            } else {
+                return null;
+            }
+
+        } catch (PDOException $error) {
+            echo "Error al ver la nota." . $error->getMessage();
+        } finally {
+            $pdo = null;
+            $stmt = null;
+        }
+    }
+
+}
 ?>

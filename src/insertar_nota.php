@@ -3,11 +3,7 @@ require_once "db/conexion.php";
 require_once "models/Nota.php";
 
 try {
-    $nota = new Nota();
-
-    $nota->titulo = "Nota de prueba";
-    $nota->contenido = "Esta nota es de prueba";
-    $nota->usuario_id = 1;
+    $nota = new Nota("Nota de prueba 2", "Esta nota es de prueba 2", 1);
 
     $nota->insertarNota($pdo);
     
