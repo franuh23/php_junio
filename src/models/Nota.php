@@ -6,7 +6,6 @@ class Nota
     private $titulo;
     private $contenido;
     private $fecha_creacion;
-    //private $fecha_actualizacion;
     private $usuario_id;
 
     public function __construct($titulo, $contenido, $usuario_id, $fecha_creacion = null)
@@ -15,7 +14,6 @@ class Nota
         $this->titulo = $titulo;
         $this->contenido = $contenido;
         $this->fecha_creacion = $fecha_creacion;
-        //$this->fecha_actualizacion = $fecha_actualizacion;
         $this->usuario_id = $usuario_id;
     }
 
@@ -63,14 +61,10 @@ class Nota
     {
         try {
             $sql = "SELECT id, titulo, usuario_id FROM notas LIMIT 50";
-
             $stmt = $pdo->prepare($sql);
-            
             $stmt->execute();
 
             $notas = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-            //var_dump($notas);
 
             foreach ($notas as $nota) {
                 echo "ID nota: " . $nota['id'] . "<br>";
@@ -107,6 +101,80 @@ class Nota
         } finally {
             $pdo = null;
             $stmt = null;
+        }
+    }
+
+    public function actualizarNota($pdo, $id) {
+        try {
+            // Comprobamos si la nota existe
+            $sqlCheck = "SELECT COUNT(*) FROM notas WHERE id = :id";
+            $stmtCheck = $pdo->prepare($sqlCheck);
+            $stmtCheck->bindParam(":id", $id, PDO::PARAM_INT);
+            $stmtCheck->execute();
+
+            $existe = $stmtCheck->fetchColumn();
+
+            if ($existe == 0) {
+                echo "Error: La nota no existe";
+                return false;
+            }
+
+            // Si existe, actualizamos
+            $sql = "UPDATE notas SET titulo = :titulo, contenido = :contenido WHERE id = :id";
+            $stmt = $pdo->prepare($sql);
+
+            $stmt->bindParam(':titulo', $this->titulo);
+            $stmt->bindParam(':contenido', $this->contenido);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+
+            $stmt->execute();
+
+            echo "Nota actualizada correctamente";
+            return true;
+
+        } catch (PDOException $error) {
+            echo "Error al actualizar la nota: " . $error->getMessage();
+            return false;
+        } finally {
+            $pdo = null;
+            $stmt = null;
+            if (isset($stmtCheck)) $stmtCheck = null;
+        }
+    }
+
+    public function borrarNota ($pdo, $id) {
+        try {
+            // Comprobamos si la nota existe
+            $sqlCheck = "SELECT COUNT(*) FROM notas WHERE id = :id";
+            $stmtCheck = $pdo->prepare($sqlCheck);
+            $stmtCheck->bindParam(":id", $id, PDO::PARAM_INT);
+            $stmtCheck->execute();
+
+            $existe = $stmtCheck->fetchColumn();
+
+            if ($existe == 0) {
+                echo "Error: La nota no existe";
+                return false;
+            }
+
+            // Si existe, borramos
+            $sql = "DELETE FROM notas WHERE id = :id";
+            $stmt = $pdo->prepare($sql);
+
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+
+            $stmt->execute();
+
+            echo "Nota borrada correctamente";
+            return true;
+
+        } catch (PDOException $error) {
+            echo "Error al borrar la nota: " . $error->getMessage();
+            return false;
+        } finally {
+            $pdo = null;
+            $stmt = null;
+            if (isset($stmtCheck)) $stmtCheck = null;
         }
     }
 

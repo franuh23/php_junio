@@ -6,7 +6,8 @@
     <title>Formulario usuario</title>
 </head>
 <body>
-    <form action="insertar_usuario.php" method="POST">
+    <h3>Insertar usuario</h3>
+    <form action="../procesar_insertar_usuario.php" method="POST">
         
         <label for="nombre">Nombre:</label>
         <input type="text" name="nombre"><br><br>
