@@ -66,11 +66,7 @@ class Nota
 
             $notas = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            foreach ($notas as $nota) {
-                echo "ID nota: " . $nota['id'] . "<br>";
-                echo "Título nota: " . $nota['titulo'] . "<br>";
-                echo "Usuario nota: " . $nota['usuario_id'] . "<br><br>";
-            }
+            return $notas;
 
         } catch (PDOException $error) {
             echo "Error en el select de listar notas" . $error->getMessage();
@@ -80,6 +76,7 @@ class Nota
         }
     }
 
+    // recuperar nota
     public static function verNota($pdo, $id) {
         try {
             $sql = "SELECT id, titulo, contenido, fecha_creacion, usuario_id FROM notas WHERE id = :id";
@@ -104,28 +101,15 @@ class Nota
         }
     }
 
-    public function actualizarNota($pdo, $id) {
-        try {
-            // Comprobamos si la nota existe
-            $sqlCheck = "SELECT COUNT(*) FROM notas WHERE id = :id";
-            $stmtCheck = $pdo->prepare($sqlCheck);
-            $stmtCheck->bindParam(":id", $id, PDO::PARAM_INT);
-            $stmtCheck->execute();
-
-            $existe = $stmtCheck->fetchColumn();
-
-            if ($existe == 0) {
-                echo "Error: La nota no existe";
-                return false;
-            }
-
+    public function actualizarNota($pdo) {
+        try {    
             // Si existe, actualizamos
             $sql = "UPDATE notas SET titulo = :titulo, contenido = :contenido WHERE id = :id";
             $stmt = $pdo->prepare($sql);
 
             $stmt->bindParam(':titulo', $this->titulo);
             $stmt->bindParam(':contenido', $this->contenido);
-            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->bindParam(':id', $this->id, PDO::PARAM_INT);
 
             $stmt->execute();
 
@@ -138,45 +122,29 @@ class Nota
         } finally {
             $pdo = null;
             $stmt = null;
-            if (isset($stmtCheck)) $stmtCheck = null;
         }
     }
 
-    public function borrarNota ($pdo, $id) {
+    public function borrarNota ($pdo) {
         try {
-            // Comprobamos si la nota existe
-            $sqlCheck = "SELECT COUNT(*) FROM notas WHERE id = :id";
-            $stmtCheck = $pdo->prepare($sqlCheck);
-            $stmtCheck->bindParam(":id", $id, PDO::PARAM_INT);
-            $stmtCheck->execute();
-
-            $existe = $stmtCheck->fetchColumn();
-
-            if ($existe == 0) {
-                echo "Error: La nota no existe";
-                return false;
-            }
-
             // Si existe, borramos
             $sql = "DELETE FROM notas WHERE id = :id";
             $stmt = $pdo->prepare($sql);
 
-            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->bindParam(':id', $this->id, PDO::PARAM_INT);
 
             $stmt->execute();
 
             echo "Nota borrada correctamente";
             return true;
-
+            
         } catch (PDOException $error) {
             echo "Error al borrar la nota: " . $error->getMessage();
             return false;
         } finally {
             $pdo = null;
             $stmt = null;
-            if (isset($stmtCheck)) $stmtCheck = null;
         }
     }
-
 }
 ?>

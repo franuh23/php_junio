@@ -13,7 +13,13 @@
 
         try {
             
-            Usuario::listarUsuarios($pdo);
+            $usuarios = Usuario::listarUsuarios($pdo);
+
+            foreach ($usuarios as $usuario) {
+                echo "Nombre: " . $usuario['nombre'] . "<br>";
+                echo "Email: " . $usuario['email'] . "<br>";
+                echo "Fecha de registro: " . $usuario['fecha_registro'] . "<br><br>";
+            }
             
         } catch (PDOException $error) {
             echo "Error al listar usuarios" . $error->getMessage();
@@ -26,8 +32,16 @@
         require_once "models/Nota.php";
 
         try {
+
+            $notas = Nota::listarNotas($pdo);
             
-            Nota::listarNotas($pdo);
+            // corregir esto
+            foreach ($notas as $nota) {
+                echo "Nombre: " . $nota['nombre'] . "<br>";
+                echo "Email: " . $nota['email'] . "<br>";
+                echo "Fecha de registro: " . $nota['fecha_registro'] . "<br><br>";
+            }
+            
             
         } catch (PDOException $error) {
             echo "Error al listar notas" . $error->getMessage();

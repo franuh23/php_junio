@@ -8,9 +8,8 @@ class Usuario
     private $password;
     private $fecha_registro;
 
-    public function __construct($nombre, $email, $password, $id = null, $fecha_registro = null)
+    public function __construct($nombre, $email, $password, $fecha_registro = null)
     {
-        $this->id = $id;
         $this->nombre = $nombre;
         $this->email = $email;
         $this->password = $password;
@@ -66,12 +65,7 @@ class Usuario
             $stmt->execute();
 
             $usuarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-            foreach ($usuarios as $usuario) {
-                echo "Nombre: " . $usuario['nombre'] . "<br>";
-                echo "Email: " . $usuario['email'] . "<br>";
-                echo "Fecha de registro: " . $usuario['fecha_registro'] . "<br><br>";
-            }
+            return $usuarios;
 
         } catch (PDOException $error) {
             echo "Error al listar los usuarios" . $error->getMessage();
@@ -81,7 +75,7 @@ class Usuario
         }
     }
 
-    public static function verUsuario($pdo, $id) {
+    public static function recuperarUsuario($pdo, $id) {
         try {
             $sql = "SELECT id, nombre, email, fecha_registro, password FROM usuarios WHERE id = :id";
             $stmt = $pdo->prepare($sql);
@@ -105,28 +99,15 @@ class Usuario
         }
     }
 
-    public function actualizarUsuario($pdo, $id) {
+    public function actualizarUsuario($pdo) {
         try {
-            // Comprobamos si el usuario existe
-            $sqlCheck = "SELECT COUNT(*) FROM usuarios WHERE id = :id";
-            $stmtCheck = $pdo->prepare($sqlCheck);
-            $stmtCheck->bindParam(":id", $id, PDO::PARAM_INT);
-            $stmtCheck->execute();
-
-            $existe = $stmtCheck->fetchColumn();
-
-            if ($existe == 0) {
-                echo "Error: El usuario no existe";
-                return false;
-            }
-
             // Si existe, actualizamos
             $sql = "UPDATE usuarios SET nombre = :nombre, email = :email WHERE id = :id";
             $stmt = $pdo->prepare($sql);
 
             $stmt->bindParam(':nombre', $this->nombre);
             $stmt->bindParam(':email', $this->email);
-            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->bindParam(':id', $this->id, PDO::PARAM_INT);
 
             $stmt->execute();
 
@@ -139,30 +120,16 @@ class Usuario
         } finally {
             $pdo = null;
             $stmt = null;
-            if (isset($stmtCheck)) $stmtCheck = null;
         }
     }
 
-    public function borrarUsuario ($pdo, $id) {
+    public function borrarUsuario ($pdo) {
         try {
-            // Comprobamos si el usuario existe
-            $sqlCheck = "SELECT COUNT(*) FROM usuarios WHERE id = :id";
-            $stmtCheck = $pdo->prepare($sqlCheck);
-            $stmtCheck->bindParam(":id", $id, PDO::PARAM_INT);
-            $stmtCheck->execute();
-
-            $existe = $stmtCheck->fetchColumn();
-
-            if ($existe == 0) {
-                echo "Error: El usuario no existe";
-                return false;
-            }
-
             // Si existe, borramos
             $sql = "DELETE FROM usuarios WHERE id = :id";
             $stmt = $pdo->prepare($sql);
 
-            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->bindParam(':id', $this->id, PDO::PARAM_INT);
 
             $stmt->execute();
 
@@ -175,7 +142,6 @@ class Usuario
         } finally {
             $pdo = null;
             $stmt = null;
-            if (isset($stmtCheck)) $stmtCheck = null;
         }
     }
 }
