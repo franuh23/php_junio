@@ -37,11 +37,9 @@
             
             // corregir esto
             foreach ($notas as $nota) {
-                echo "Nombre: " . $nota['nombre'] . "<br>";
-                echo "Email: " . $nota['email'] . "<br>";
-                echo "Fecha de registro: " . $nota['fecha_registro'] . "<br><br>";
+                echo "Titulo: " . $nota['titulo'] . "<br>";
+                echo "Contenido: " . $nota['contenido'] . "<br><br>";
             }
-            
             
         } catch (PDOException $error) {
             echo "Error al listar notas" . $error->getMessage();

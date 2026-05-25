@@ -3,7 +3,7 @@
 require_once "db/conexion.php";
 require_once "models/Usuario.php";
 
-$usuario = Usuario::verUsuario($pdo, 2);
+$usuario = Usuario::recuperarUsuario($pdo, 2);
 
 if ($usuario) {
     echo "ID del usuario: " . $usuario['id'] . "<br>";

@@ -3,7 +3,6 @@
 	/**
 	 * En este archivo es donde se realiza la conexión con la base de datos
 	 */
-	
 	$host = "db";
 	$nombreBSD = "php_junio";
 	$user = "root";

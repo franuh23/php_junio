@@ -24,6 +24,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "Error: " . $error->getMessage();
     }
 } else {
-     echo "Error al enviar el formulario";
+    echo "Error al enviar el formulario";
 }
 ?>
