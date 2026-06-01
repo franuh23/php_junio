@@ -11,7 +11,7 @@
 	try {
 		// Conexión a la BD
 		$pdo = new PDO("mysql:host=$host;dbname=$nombreBSD;charset=utf8", $user, $pass, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
-		echo "Conexión correcta" . "<br><br>";
+		//echo "Conexión correcta" . "<br><br>";
 	}
 	catch (PDOException $e) {
 		echo "Error: " . $e->getMessage();
