@@ -49,6 +49,9 @@ class Usuario
 
             $stmt->execute();
 
+            // Buscar el metodo de base de datos que devuelve el id
+            return $this->id;
+
             echo "Usuario insertado correctamente";
         } catch (PDOException $error) {
             echo "Error en la inserción" . $error->getMessage();
@@ -101,7 +104,6 @@ class Usuario
 
     public function actualizarUsuario($pdo) {
         try {
-            // Si existe, actualizamos
             $sql = "UPDATE usuarios SET nombre = :nombre, email = :email WHERE id = :id";
             $stmt = $pdo->prepare($sql);
 
