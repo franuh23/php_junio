@@ -45,9 +45,14 @@ switch ($metodo) {
         // Obtenemos los datos de la petición
         $datos = obtenerDatosPeticion();
 
-        if ($datos) {
-            $usuario = new Usuario($datos["nombre"], $datos["email"], $datos["password"]);
-            $idNuevoUsuario = $usuario->insertarUsuario($pdo);
+        // Validamos campos
+        $nombre = validarCampo($datos["nombre"]);
+        $email = validarEmail($datos["email"]);
+        $password = validarCampo($datos["password"]);
+
+        if ($nombre && $email && $password) {
+            $nuevoUsuario = new Usuario($nombre, $email, $password);
+            $idNuevoUsuario = $nuevoUsuario->insertarUsuario($pdo);
 
             // Recuperamos el usuario insertado
             $usuario = Usuario::recuperarUsuario($pdo, $idNuevoUsuario);
@@ -64,23 +69,30 @@ switch ($metodo) {
 
     // Actualizar usuario
     case 'PUT':
+        // Si el ID es cero
+        if ($id == 0) {
+            formatearRespuesta(["mensaje"=> "No se ha informado un ID válido."], 400);
+        }
+
         // Obtenemos los datos de la petición
         $datos = obtenerDatosPeticion();
 
-        // Comprobamos si el ID es cero
-        if ($id != 0) {
-            // Si no es cero recuperamos el usuario
-            $usuario = Usuario::recuperarUsuario($pdo, $id);
+        // Validamos campos
+        $nombre = validarCampo($datos["nombre"]);
+        $email = validarEmail($datos["email"]);
+
+        if ($nombre && $email) {
             // Comprobamos si el usuario existe
-            if ($usuario) {
+            $existe = Usuario::recuperarUsuario($pdo, $id);
+            if ($existe) {
+                $usuario = new Usuario($nombre, $email, $id);
                 $usuario->actualizarUsuario($pdo);
                 formatearRespuesta(["mensaje" => "Usuario actualizado correctamente."], 200);
             } else {
                 formatearRespuesta(["mensaje" => "El usuario no existe."], 400);
             }
         } else {
-            // Si es cero lanzamos error
-            formatearRespuesta(["mensaje" => "No se ha informado un ID."], 400);
+            formatearRespuesta(["mensaje" => "No se han informado los datos correctamente."], 400);
         }   
         break;
     

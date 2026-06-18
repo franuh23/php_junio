@@ -13,23 +13,28 @@ $pronosticoDecode = json_decode($pronostico);
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="utf-8">
-    <title>Pronóstico meteorológico</title>
+	<meta charset="utf-8">
+	<title>Pronóstico meteorológico</title>
 </head>
+
 <body>
 	<h1>Pronóstico del tiempo para hoy en Sax (España)</h1>
 	<h2>Datos en bruto en formato JSON:</h2>
-	<p><?= $pronostico?></p>
+	<p><?= $pronostico ?></p>
 	<hr>
 	<h2>Datos en un objeto JSON:</h2>
-	<p><?= var_dump($pronosticoDecode)?></p>
+	<p><?= var_dump($pronosticoDecode) ?></p>
 	<hr>
 	<h2>Información formateada:</h2>
 	<p>
-		Temperatura: <?=$pronosticoDecode->main->temp?> grados Kelvin<br>
-		Humedad: <?=$pronosticoDecode->main->humidity?> %<br>
-		Presión: <?=$pronosticoDecode->main->pressure?>mb
+		Temperatura: <?= $pronosticoDecode->main->temp ?> grados Kelvin<br>
+		Humedad: <?= $pronosticoDecode->main->humidity ?> %<br>
+		Presión: <?= $pronosticoDecode->main->pressure ?>mb<br>
+		País: <?= $pronosticoDecode->sys->country ?><br>
+		Velocidad: <?= $pronosticoDecode->wind->speed ?> nudos<br>
 	</p>
 </body>
+
 </html>

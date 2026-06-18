@@ -49,10 +49,13 @@ class Usuario
 
             $stmt->execute();
 
-            // Buscar el metodo de base de datos que devuelve el id
-            return $this->id;
+            // Obtenemos el último Id insertado
+            $this->id = $pdo->lastInsertId();
 
             echo "Usuario insertado correctamente";
+
+            return $this->id;
+
         } catch (PDOException $error) {
             echo "Error en la inserción" . $error->getMessage();
         } finally {
