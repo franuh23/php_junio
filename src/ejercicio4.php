@@ -33,6 +33,17 @@ foreach ($empleados as $empleado) {
 }
 
 // Empleado en cada departamenteo
+
+$departamentos = [];
+$numero = 3;
+
+for ($i = 0; $i < $numero; $i++) {
+
+    $departamentos["RRHH"] = 5;
+    $departamentos[$nombreDep] = $cantidad;
+
+}
+
 $contabilidad = 0;
 $RRHH = 0;
 $departamento = "RRHH";
@@ -43,6 +54,7 @@ foreach ($empleados as $empleado) {
         $contabilidad ++;
     }
 }
+
 
 ?>
 
